@@ -143,12 +143,14 @@ Idiomatic C++20 implementations of the Apache Arrow memory format + canonical ex
 
 * Zero dependencies for Sparrow
   * ... except when compiling with libc++ (P0355R7 Timezone)
-  * zstd and lz4 if support for compressed IPC
+  * ... zstd and lz4 if support for compressed IPC
 * Passes all Apache Arrow integration tests, compatible with formats 1.0 to 1.5
 * Packaged for Conda, Conan, Fedora and vcpkg
 * Licensed under Apache License v2 or BSD
 
 ---
+
+# Nullable
 
 ```c++
 sp::nullable<int> n = 2;
@@ -160,6 +162,8 @@ std::cout << nd.has_value() << std::endl; // Prints false
 ```
 
 ---
+
+# Typed Array
 
 ```c++
 sp::primitive_array<int> ar = { 1, 3, 5, 7, 9 };
@@ -178,30 +182,36 @@ std::for_each(pa.begin(), pa.end(), [](auto n) { std::cout << n.value() << ' '; 
 
 ---
 
+# C Structures and untyped arrays
+
 ```c++
-auto [arrow_array, arrow_schema] = sp::extract_arrow_structures(std::move(ar));
-// Use arrow_array and arrow_schema as you need (serialization, passing them to
+auto [c_arrow_array, c_arrow_schema] = sp::extract_arrow_structures(std::move(ar));
+// Use c_arrow_array and c_arrow_schema as you need (serialization, passing them to
 // a third party library)
 // ...
 // You are responsible for releasing the structures at the end
-arrow_array.release(&arrow_array);
-arrow_schema.release(&arrow_schema);
+c_arrow_array.release(&c_arrow_array);
+c_arrow_schema.release(&c_arrow_schema);
 ```
 
 ---
 
+# C Structures and untyped arrays
+
 ```c++
-tpl::read_arrow_structures(&array, &schema);
-sp::array ar(&array, &schema);
+ArrowArray c_arrow_array;
+ArrowSchema c_arrow_schema;
+tpl::read_arrow_structures(&c_arrow_array, &c_arrow_schema);
+sp::array ar(&c_arrow_array, &c_arrow_schema);
 // Use ar as you need
 // ...
 // You are responsible for releasing the structures at the end
-array.release(&array);
-schema.release(&schema);
+c_arrow_array.release(&c_arrow_array);
+c_arrow_schema.release(&c_arrow_schema);
 ```
 
 ---
-
+# C Structures and untyped arrays
 ```c++
 sp::array ar(std::move(array), std::move(schema));
 // Use ar as you need
@@ -210,6 +220,8 @@ sp::array ar(std::move(array), std::move(schema));
 ```
 
 ---
+
+# Visit untyped arrays
 
 ```c++
 ar.visit([]<class T>(const T& typed_ar)
@@ -227,6 +239,10 @@ ar.visit([]<class T>(const T& typed_ar)
 
 ---
 
+![bg  fit 65%](resources/sparrow_archi.svg)
+
+---
+
 # Sparrow IPC
 ```c++
 const std::vector<sp::record_batch>& batches = /* ... */;
@@ -238,7 +254,7 @@ return stream_data;
 ```
 
 ```c++
-std::vector<sparrow::record_batch> batches = sp_ipc::deserialize_stream(stream_data);
+std::vector<sp::record_batch> batches = sp_ipc::deserialize_stream(stream_data);
 ```
 
 ---
@@ -248,7 +264,7 @@ std::vector<sparrow::record_batch> batches = sp_ipc::deserialize_stream(stream_d
 ## Exporting to python
 
 ```c++
-PyObject* sparrow_array = sparrow::pycapsule::create_sparrow_array_object(std::move(my_array));
+PyObject* sparrow_array = sp::pycapsule::create_sparrow_array_object(std::move(my_array));
 ```
 
 ```python
