@@ -159,6 +159,7 @@ std::cout << n.value() << std::endl;     // Prints 2
  
 sp::nullable<double> nd = sp::nullval;
 std::cout << nd.has_value() << std::endl; // Prints false
+std::cout << nd.value() << std::endl; // Throws sp::bad_nullable_access
 ```
 
 ---
@@ -169,9 +170,9 @@ std::cout << nd.has_value() << std::endl; // Prints false
 sp::primitive_array<int> ar = { 1, 3, 5, 7, 9 };
 std::cout << ar.size() << std::endl;  // Prints 4
 std::cout << ar.empty() << std::endl; // Prints false
-std::cout << pa.front().value() << std::endl; // Prints 1
-std::cout << pa.back().value() << std::endl;  // Prints 4
-std::cout << pa[2].value() << std::endl;      // Prints 3
+std::cout << ar.front().value() << std::endl; // Prints 1
+std::cout << ar.back().value() << std::endl;  // Prints 4
+std::cout << ar[2].value() << std::endl;      // Prints 3
 try{
   std::cout << pa.at(5).value() << std::endl;   // Throws std::out_of_range
 }catch (const std::out_of_range& e) {
@@ -342,9 +343,16 @@ sp::array imported_array = sp::pycapsule::import_array_from_capsules(
 
 ---
 
+
 # Thanks !
 
 # Resources
 
 - https://github.com/man-group/sparrow
 - https://github.com/sparrow-org
+
+---
+
+<img src="resources/Compute presentation.png">
+
+https://compute.events
