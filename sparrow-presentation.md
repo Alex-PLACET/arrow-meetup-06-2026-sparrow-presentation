@@ -346,13 +346,8 @@ sp::array imported_array = sp::pycapsule::import_array_from_capsules(
 
 # Thanks !
 
-# Resources
-
-- https://github.com/man-group/sparrow
 - https://github.com/sparrow-org
 
 ---
 
-<img src="resources/Compute presentation.png">
-
-https://compute.events
+![bg  fit 65%](resources/Compute_presentation.jpg)
