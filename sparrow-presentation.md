@@ -153,13 +153,17 @@ Idiomatic C++20 implementations of the Apache Arrow memory format + canonical ex
 # Nullable
 
 ```c++
-sp::nullable<int> n = 2;
-std::cout << n.has_value() << std::endl; // Prints true
-std::cout << n.value() << std::endl;     // Prints 2
- 
 sp::nullable<double> nd = sp::nullval;
 std::cout << nd.has_value() << std::endl; // Prints false
-std::cout << nd.value() << std::endl; // Throws sp::bad_nullable_access
+std::cout << nd.value() << std::endl; // Throws 
+nd = 3.14;
+std::cout << nd.has_value() << std::endl; // Prints true
+std::cout << nd.value() << std::endl;     // Prints 3.14
+
+bool is_null = true;
+int val = 12;
+sp::nullable<int&> my_nullable{val, is_null};
+my_nullable = 42;
 ```
 
 ---
